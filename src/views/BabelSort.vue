@@ -16,15 +16,22 @@
       </md-field>
       <md-field>
         <label for="sort">Sort</label>
+        <input type="text" v-model="sort" required style="display: none" />
         <md-select v-model="sort" name="sort" id="sort">
           <md-option value="Bubble">Bubble sort</md-option>
           <md-option value="Shake">Shake sort</md-option>
         </md-select>
+        <span class="md-error">The Sort is required</span>
       </md-field>
       <md-switch v-model="boolean" class="md-primary"
         >Surname or Group</md-switch
       >
-      <md-button class="md-raised md-primary" type="submit">Sort</md-button>
+      <div>
+        <md-button class="md-raised md-primary" type="submit">Sort</md-button>
+        <md-button class="md-raised md-primary" v-on:click="save"
+          >Save</md-button
+        >
+      </div>
     </form>
     <ul>
       <li v-for="(person, index) of objects" :person="person" :key="index">
@@ -48,7 +55,7 @@ class Person {
     this.group = group;
   }
 }
-let arr = [];
+let arr = [...JSON.parse(localStorage.getItem("objects"))];
 export default {
   name: "ErrorsMessages",
   data() {
@@ -61,6 +68,10 @@ export default {
     };
   },
   methods: {
+    save() {
+      const parsed = JSON.stringify(this.objects);
+      localStorage.setItem("objects", parsed);
+    },
     chosingSort() {
       if (this.sort == "Bubble") {
         this.babelSort();
@@ -69,7 +80,6 @@ export default {
       }
     },
     babelSort() {
-      console.log(this.movie);
       arr.push(new Person(this.surname, this.group));
       //console.log("arr", arr);
       if (this.boolean === false) {
@@ -106,19 +116,14 @@ export default {
         } while (swap == true);
       }
       this.objects = arr;
-      //console.log("arr", arr);
-      //console.log("objects", this.objects);
-      //console.log("persons", this.objects);
-      //messageClass();
       this.surname = "";
       this.group = "";
     },
     shakeSort() {
       arr.push(new Person(this.surname, this.group));
-      //console.log("arr", arr);
       if (this.boolean === false) {
-        let left = 0; //начало массива
-        let right = arr.length - 1; //конец массива
+        let left = 0;
+        let right = arr.length - 1;
         do {
           for (let i = left; i < right; i++) {
             if (arr[i].surname > arr[i + 1].surname) {
@@ -132,7 +137,6 @@ export default {
               ];
             }
           }
-          // console.log('arr :', arr);
           right--;
           for (let i = right; left < i; i--) {
             if (arr[i].surname < arr[i - 1].surname) {
@@ -146,12 +150,11 @@ export default {
               ].group;
             }
           }
-          // console.log('arr :', arr);
           left++;
         } while (left < right);
       } else {
-        let left = 0; //начало массива
-        let right = arr.length - 1; //конец массива
+        let left = 0;
+        let right = arr.length - 1;
         do {
           for (let i = left; i < right; i++) {
             if (arr[i].group > arr[i + 1].group) {
@@ -165,7 +168,6 @@ export default {
               ];
             }
           }
-          // console.log('arr :', arr);
           right--;
           for (let i = right; left < i; i--) {
             if (arr[i].group < arr[i - 1].group) {
@@ -179,26 +181,14 @@ export default {
               ].group;
             }
           }
-          // console.log('arr :', arr);
           left++;
         } while (left < right);
       }
       this.objects = arr;
-      //console.log("arr", arr);
-      //console.log("objects", this.objects);
-      //console.log("persons", this.objects);
-      //messageClass();
       this.surname = "";
       this.group = "";
     },
   },
-  // computed: {
-  //   messageClass() {
-  //     return {
-  //       "md-invalid": !this.surname.length || !this.group.length,
-  //     };
-  //   },
-  // },
 };
 </script>
 
