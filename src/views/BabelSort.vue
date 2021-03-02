@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <h2>{{ this.sort }} sort</h2>
+    <h2>{{ chosingSortText }}</h2>
     <form class="form" action="" @submit.prevent="chosingSort">
       <md-field>
         <label>Type here surname!</label>
@@ -33,11 +33,20 @@
         >
       </div>
     </form>
-    <ul>
-      <li v-for="(person, index) of objects" :person="person" :key="index">
-        {{ index + 1 }} {{ person.surname }} {{ person.group }}
-      </li>
-    </ul>
+    <!-- <div id="app-2">
+      <span v-bind:title="message">
+        Наведи на меня курсор на пару секунд, чтобы увидеть динамически
+        связанное значение title!
+      </span>
+      <p>Сообщение задом наперёд: «{{ reversedMessage }}»</p>
+    </div> -->
+    <table>
+      <tr v-for="(person, index) of objects" :person="person" :key="index">
+        <td>{{ index + 1 }}</td>
+        <td>{{ person.surname }}</td>
+        <td>{{ person.group }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -57,7 +66,6 @@ class Person {
 }
 let arr = [...JSON.parse(localStorage.getItem("objects"))];
 export default {
-  name: "ErrorsMessages",
   data() {
     return {
       surname: "",
@@ -67,16 +75,40 @@ export default {
       sort: "",
     };
   },
+  computed: {
+    chosingSortText() {
+      let result;
+      switch (this.sort) {
+        case "Bubble":
+          result = "Bubble sort";
+          break;
+        case "Shake":
+          result = "Shake sort";
+          break;
+
+        default:
+          result = "Sort";
+          break;
+      }
+      return result;
+    },
+  },
   methods: {
     save() {
       const parsed = JSON.stringify(this.objects);
       localStorage.setItem("objects", parsed);
     },
     chosingSort() {
-      if (this.sort == "Bubble") {
-        this.babelSort();
-      } else {
-        this.shakeSort();
+      switch (this.sort) {
+        case "Bubble":
+          this.babelSort();
+          break;
+        case "Shake":
+          this.shakeSort();
+          break;
+
+        default:
+          break;
       }
     },
     babelSort() {
@@ -89,11 +121,9 @@ export default {
           swap = false;
           for (let index = 0; index < arr.length - 1; index++) {
             if (arr[index].surname > arr[index + 1].surname) {
-              temp = arr[index].surname;
-              arr[index].surname = arr[index + 1].surname;
-              arr[index + 1].surname = temp;
-              arr[index].group = arr[index + 1].group;
-              arr[index + 1].group = temp;
+              temp = arr[index];
+              arr[index] = arr[index + 1];
+              arr[index + 1] = temp;
               swap = true;
             }
           }
@@ -105,11 +135,9 @@ export default {
           swap = false;
           for (let index = 0; index < arr.length - 1; index++) {
             if (arr[index].group > arr[index + 1].group) {
-              temp = arr[index].group;
-              arr[index].surname = arr[index + 1].surname;
-              arr[index + 1].surname = temp;
-              arr[index].group = arr[index + 1].group;
-              arr[index + 1].group = temp;
+              temp = arr[index];
+              arr[index] = arr[index + 1];
+              arr[index + 1] = temp;
               swap = true;
             }
           }
@@ -127,27 +155,13 @@ export default {
         do {
           for (let i = left; i < right; i++) {
             if (arr[i].surname > arr[i + 1].surname) {
-              [arr[i].surname, arr[i + 1].surname] = [
-                arr[i + 1].surname,
-                arr[i].surname,
-              ];
-              [arr[i].group, arr[i + 1].group] = [
-                arr[i + 1].group,
-                arr[i].group,
-              ];
+              [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
             }
           }
           right--;
           for (let i = right; left < i; i--) {
             if (arr[i].surname < arr[i - 1].surname) {
-              [arr[i].surname, arr[i - 1]].surname = [
-                arr[i - 1].surname,
-                arr[i],
-              ].surname;
-              [arr[i].group, arr[i - 1]].group = [
-                arr[i - 1].group,
-                arr[i],
-              ].group;
+              [arr[i], arr[i - 1]] = [arr[i - 1], arr[i]];
             }
           }
           left++;
@@ -158,27 +172,13 @@ export default {
         do {
           for (let i = left; i < right; i++) {
             if (arr[i].group > arr[i + 1].group) {
-              [arr[i].surname, arr[i + 1].surname] = [
-                arr[i + 1].surname,
-                arr[i].surname,
-              ];
-              [arr[i].group, arr[i + 1].group] = [
-                arr[i + 1].group,
-                arr[i].group,
-              ];
+              [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
             }
           }
           right--;
           for (let i = right; left < i; i--) {
             if (arr[i].group < arr[i - 1].group) {
-              [arr[i].surname, arr[i - 1]].surname = [
-                arr[i - 1].surname,
-                arr[i],
-              ].surname;
-              [arr[i].group, arr[i - 1]].group = [
-                arr[i - 1].group,
-                arr[i],
-              ].group;
+              [arr[i], arr[i - 1]] = [arr[i - 1], arr[i]];
             }
           }
           left++;
@@ -206,10 +206,8 @@ export default {
   flex-direction: column;
   width: 35%;
 }
-ul {
-  padding: 0;
-}
-li {
-  list-style-type: none;
+td {
+  padding: 5px 13px;
+  border: 1px solid #448aff;
 }
 </style>
