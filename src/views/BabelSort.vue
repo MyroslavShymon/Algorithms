@@ -1,47 +1,64 @@
 <template>
   <div class="wrapper">
-    <h2>{{ chosingSortText }}</h2>
-    <form class="form" action="" @submit.prevent="chosingSort">
-      <md-field>
-        <label>Type here surname!</label>
-        <md-input v-model="surname" required></md-input>
-        <span class="md-error">There is an error</span>
-        <span class="md-helper-text">Surname</span>
-      </md-field>
-      <md-field>
-        <label>Type here group!</label>
-        <md-input v-model="group" required></md-input>
-        <span class="md-error">There is an error</span>
-        <span class="md-helper-text">Group</span>
-      </md-field>
-      <md-field>
-        <label for="sort">Sort</label>
-        <input type="text" v-model="sort" required style="display: none" />
-        <md-select v-model="sort" name="sort" id="sort">
-          <md-option value="Bubble">Bubble sort</md-option>
-          <md-option value="Shake">Shake sort</md-option>
-          <md-option value="Selection">Selection sort</md-option>
-          <md-option value="Insertion">Insertion sort</md-option>
-        </md-select>
-        <span class="md-error">The Sort is required</span>
-      </md-field>
-      <md-switch v-model="boolean" class="md-primary"
-        >Surname or Group</md-switch
-      >
+    <div class="data-wrapper">
+      <Chart :spead="avarageSpeads" v-if="isHidden"></Chart>
       <div>
-        <md-button class="md-raised md-primary" type="submit">Sort</md-button>
-        <md-button class="md-raised md-primary" v-on:click="save"
-          >Save</md-button
-        >
+        <h2>{{ chosingSortText }}</h2>
+        <form class="form" action="" @submit.prevent="add">
+          <md-field>
+            <label>Type here surname!</label>
+            <md-input v-model="surname" required></md-input>
+            <span class="md-error">There is an error</span>
+            <span class="md-helper-text">Surname</span>
+          </md-field>
+          <md-field>
+            <label>Type here group!</label>
+            <md-input v-model="group" required></md-input>
+            <span class="md-error">There is an error</span>
+            <span class="md-helper-text">Group</span>
+          </md-field>
+          <md-field>
+            <label for="sort">Sort</label>
+            <input type="text" v-model="sort" style="display: none" />
+            <md-select v-model="sort" name="sort" id="sort">
+              <md-option value="Bubble">Bubble sort</md-option>
+              <md-option value="Shake">Shake sort</md-option>
+              <md-option value="Selection">Selection sort</md-option>
+              <md-option value="Insertion">Insertion sort</md-option>
+            </md-select>
+            <span class="md-error">The Sort is required</span>
+          </md-field>
+          <md-switch v-model="boolean" class="md-primary"
+            >Surname or Group</md-switch
+          >
+          <textarea name="" id="" cols="30" rows="10" v-model="test"></textarea>
+
+          <div>
+            <md-button class="md-raised md-primary" v-on:click="testAdd"
+              >Test</md-button
+            >
+            <md-button class="md-raised md-primary" v-on:click="chosingSort"
+              >Sort</md-button
+            >
+            <md-button class="md-raised md-primary" v-on:click="save"
+              >Save</md-button
+            >
+            <md-button class="md-raised md-primary" v-on:click="read"
+              >Read</md-button
+            >
+            <md-button class="md-raised md-primary" type="submit"
+              >Add</md-button
+            >
+            <md-button
+              class="md-raised md-primary"
+              v-on:click="isHidden = !isHidden"
+              >Show graphik</md-button
+            >
+          </div>
+        </form>
       </div>
-    </form>
-    <!-- <div id="app-2">
-      <span v-bind:title="message">
-        Наведи на меня курсор на пару секунд, чтобы увидеть динамически
-        связанное значение title!
-      </span>
-      <p>Сообщение задом наперёд: «{{ reversedMessage }}»</p>
-    </div> -->
+    </div>
+
     <table>
       <thead>
         <tr>
@@ -62,46 +79,49 @@
 </template>
 
 <script>
-// const fs = require("fs");
-// fs.writeFile("hello.txt", "Hello мир!", function(error) {
-//   if (error) throw error; // если возникла ошибка
-//   console.log("Асинхронная запись файла завершена. Содержимое файла:");
-//   let data = fs.readFileSync("hello.txt", "utf8");
-//   console.log(data); // выводим считанные данные
-// });
+import Chart from "@/components/Chart";
+import { typeOfSorts } from "@/constants/";
+//import setSpead from "@/mixins/setSpead.mixin.js";
 class Person {
   constructor(surname, group) {
     this.surname = surname;
     this.group = group;
   }
 }
-// let arr = [];
-let arr = [...JSON.parse(localStorage.getItem("objects"))];
+let arr = [];
 export default {
   data() {
     return {
+      show: true,
       surname: "",
       group: "",
       objects: [],
       boolean: false,
       sort: "",
+      speads: [[], [], [], []],
+      avarageSpeads: [0, 0, 0, 0],
+      isHidden: false,
+      test: "",
     };
+  },
+  components: {
+    Chart,
   },
   computed: {
     chosingSortText() {
       let result;
       switch (this.sort) {
         case "Bubble":
-          result = "Bubble sort";
+          result = typeOfSorts[0];
           break;
         case "Shake":
-          result = "Shake sort";
+          result = typeOfSorts[1];
           break;
         case "Selection":
-          result = "Selection sort";
+          result = typeOfSorts[2];
           break;
         case "Insertion":
-          result = "Insertion sort";
+          result = typeOfSorts[3];
           break;
         default:
           result = "Sort";
@@ -111,9 +131,25 @@ export default {
     },
   },
   methods: {
+    testAdd() {
+      this.objects.length = 0;
+      arr.length = 0;
+      for (const word of this.test.split(" ")) {
+        arr.push(new Person(word, word + "_group"));
+        this.objects = arr;
+      }
+    },
+    add() {
+      arr.push(new Person(this.surname, this.group));
+      this.objects = arr;
+    },
     save() {
       const parsed = JSON.stringify(this.objects);
       localStorage.setItem("objects", parsed);
+    },
+    read() {
+      arr = [...JSON.parse(localStorage.getItem("objects"))];
+      this.objects = arr;
     },
     chosingSort() {
       switch (this.sort) {
@@ -134,8 +170,7 @@ export default {
       }
     },
     babelSort() {
-      arr.push(new Person(this.surname, this.group));
-      //console.log("arr", arr);
+      let time = performance.now();
       if (this.boolean === false) {
         let swap, temp;
         do {
@@ -163,12 +198,23 @@ export default {
           }
         } while (swap == true);
       }
-      this.objects = arr;
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
+      //this.avarageSpeads[0] = setSpead(this.speads, time, 0);
+
+      this.speads[0].push(time);
+      let sum = this.speads[0].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[0].length;
+      this.avarageSpeads[0] = avarageTime;
+      console.log(this.avarageSpeads);
       this.surname = "";
       this.group = "";
     },
     shakeSort() {
-      arr.push(new Person(this.surname, this.group));
+      let time = performance.now();
       if (this.boolean === false) {
         let left = 0;
         let right = arr.length - 1;
@@ -204,13 +250,23 @@ export default {
           left++;
         } while (left < right);
       }
-      this.objects = arr;
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
+
+      this.speads[1].push(time);
+      let sum = this.speads[1].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[1].length;
+      this.avarageSpeads[1] = avarageTime;
+
       this.surname = "";
       this.group = "";
     },
     selectionSort() {
-      arr.push(new Person(this.surname, this.group));
       let n = arr.length;
+      let time = performance.now();
       if (this.boolean === false) {
         for (let i = 0; i < n; i++) {
           // Finding the smallest number in the subarray
@@ -244,40 +300,56 @@ export default {
           }
         }
       }
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
 
-      this.objects = arr;
+      this.speads[2].push(time);
+      let sum = this.speads[2].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[2].length;
+      this.avarageSpeads[2] = avarageTime;
+
       this.surname = "";
       this.group = "";
     },
     insertionSort() {
-      arr.push(new Person(this.surname, this.group));
+      let time = performance.now();
       if (this.boolean === false) {
-        for (let i = 0, l = arr.length, k = l - 1; i < k; i++) {
-          let indexMin = i;
-          for (let j = i + 1; j < l; j++) {
-            if (arr[indexMin].surname > arr[j].surname) {
-              indexMin = j;
-            }
-          }
-          if (indexMin !== i) {
-            [arr[i], arr[indexMin]] = [arr[indexMin], arr[i]];
+        for (let counter = 1; counter < arr.length; counter++) {
+          let temp = arr[counter]; // инициализируем временную переменную текущим значением элемента массива
+          let item = counter - 1; // запоминаем индекс предыдущего элемента массива
+          while (item >= 0 && temp.surname < arr[item].surname) {
+            // пока индекс не равен 0 и предыдущий элемент массива больше текущего
+            arr[item + 1] = arr[item]; // перестановка элементов массива
+            arr[item] = temp;
+            item--;
           }
         }
       } else {
-        for (let i = 0, l = arr.length, k = l - 1; i < k; i++) {
-          let indexMin = i;
-          for (let j = i + 1; j < l; j++) {
-            if (arr[indexMin].group > arr[j].group) {
-              indexMin = j;
-            }
-          }
-          if (indexMin !== i) {
-            [arr[i], arr[indexMin]] = [arr[indexMin], arr[i]];
+        for (let counter = 1; counter < arr.length; counter++) {
+          let temp = arr[counter]; // инициализируем временную переменную текущим значением элемента массива
+          let item = counter - 1; // запоминаем индекс предыдущего элемента массива
+          while (item >= 0 && temp.group < arr[item].group) {
+            // пока индекс не равен 0 и предыдущий элемент массива больше текущего
+            arr[item + 1] = arr[item]; // перестановка элементов массива
+            arr[item] = temp;
+            item--;
           }
         }
       }
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
 
-      this.objects = arr;
+      this.speads[3].push(time);
+      let sum = this.speads[3].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[3].length;
+      this.avarageSpeads[3] = avarageTime;
+
       this.surname = "";
       this.group = "";
     },
@@ -297,10 +369,22 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 35%;
+  width: 100%;
 }
 td {
   padding: 5px 13px;
   border: 1px solid #448aff;
+}
+.data-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 80%;
+}
+h2 {
+  text-align: center;
+}
+textarea {
+  width: 100%;
 }
 </style>
