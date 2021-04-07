@@ -25,6 +25,10 @@
               <md-option value="Shake">Shake sort</md-option>
               <md-option value="Selection">Selection sort</md-option>
               <md-option value="Insertion">Insertion sort</md-option>
+              <md-option value="Shell">Shell sort</md-option>
+              <md-option value="Quick">Quick sort</md-option>
+              <md-option value="Pyramidal">Pyramidal sort</md-option>
+              <md-option value="Default">Default sort</md-option>
             </md-select>
             <span class="md-error">The Sort is required</span>
           </md-field>
@@ -98,8 +102,8 @@ export default {
       objects: [],
       boolean: false,
       sort: "",
-      speads: [[], [], [], []],
-      avarageSpeads: [0, 0, 0, 0],
+      speads: [[], [], [], [], [], [], [], []],
+      avarageSpeads: [0, 0, 0, 0, 0, 0, 0, 0],
       isHidden: false,
       test: "",
     };
@@ -122,6 +126,18 @@ export default {
           break;
         case "Insertion":
           result = typeOfSorts[3];
+          break;
+        case "Shell":
+          result = typeOfSorts[4];
+          break;
+        case "Quick":
+          result = typeOfSorts[5];
+          break;
+        case "Pyramidal":
+          result = typeOfSorts[6];
+          break;
+        case "Default":
+          result = typeOfSorts[7];
           break;
         default:
           result = "Sort";
@@ -164,6 +180,18 @@ export default {
           break;
         case "Insertion":
           this.insertionSort();
+          break;
+        case "Shell":
+          this.shellSort();
+          break;
+        case "Quick":
+          this.quickSort();
+          break;
+        case "Pyramidal":
+          this.pyramidalSort();
+          break;
+        case "Default":
+          this.defaultSort();
           break;
         default:
           break;
@@ -349,6 +377,228 @@ export default {
       );
       let avarageTime = sum / this.speads[3].length;
       this.avarageSpeads[3] = avarageTime;
+
+      this.surname = "";
+      this.group = "";
+    },
+    shellSort() {
+      let time = performance.now();
+      if (this.boolean === false) {
+        let len = arr.length;
+        let gapSize = Math.floor(len / 2);
+
+        while (gapSize > 0) {
+          for (let i = gapSize; i < len; i++) {
+            let temp = arr[i];
+            let j = i;
+
+            while (j >= gapSize && arr[j - gapSize].surname > temp.surname) {
+              arr[j] = arr[j - gapSize];
+              j -= gapSize;
+            }
+            arr[j] = temp;
+          }
+          gapSize = Math.floor(gapSize / 2);
+        }
+      } else {
+        let len = arr.length;
+        let gapSize = Math.floor(len / 2);
+
+        while (gapSize > 0) {
+          for (let i = gapSize; i < len; i++) {
+            let temp = arr[i];
+            let j = i;
+
+            while (j >= gapSize && arr[j - gapSize].surname > temp.surname) {
+              arr[j] = arr[j - gapSize];
+              j -= gapSize;
+            }
+            arr[j] = temp;
+          }
+          gapSize = Math.floor(gapSize / 2);
+        }
+      }
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
+
+      this.speads[4].push(time);
+      let sum = this.speads[4].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[4].length;
+      this.avarageSpeads[4] = avarageTime;
+
+      this.surname = "";
+      this.group = "";
+    },
+    partition(arr, start, end) {
+      // Taking the last element as the pivot
+      const pivotValue = arr[end];
+      let pivotIndex = start;
+      if (this.boolean === false) {
+        for (let i = start; i < end; i++) {
+          if (arr[i].surname < pivotValue.surname) {
+            // Swapping elements
+            [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+            // Moving to next element
+            pivotIndex++;
+          }
+        }
+      } else {
+        for (let i = start; i < end; i++) {
+          if (arr[i].group < pivotValue.group) {
+            // Swapping elements
+            [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+            // Moving to next element
+            pivotIndex++;
+          }
+        }
+      }
+
+      // Putting the pivot value in the middle
+      [arr[pivotIndex], arr[end]] = [arr[end], arr[pivotIndex]];
+      return pivotIndex;
+    },
+    quickSort() {
+      let time = performance.now();
+      // Creating an array that we'll use as a stack, using the push() and pop() functions
+      let stack = [];
+      let end, start, pivotIndex;
+
+      // Adding the entire initial array as an "unsorted subarray"
+      stack.push(0);
+      stack.push(arr.length - 1);
+
+      // There isn't an explicit peek() function
+      // The loop repeats as long as we have unsorted subarrays
+      while (stack[stack.length - 1] >= 0) {
+        // Extracting the top unsorted subarray
+        end = stack.pop();
+        start = stack.pop();
+
+        pivotIndex = this.partition(arr, start, end);
+
+        // If there are unsorted elements to the "left" of the pivot,
+        // we add that subarray to the stack so we can sort it later
+        if (pivotIndex - 1 > start) {
+          stack.push(start);
+          stack.push(pivotIndex - 1);
+        }
+
+        // If there are unsorted elements to the "right" of the pivot,
+        // we add that subarray to the stack so we can sort it later
+        if (pivotIndex + 1 < end) {
+          stack.push(pivotIndex + 1);
+          stack.push(end);
+        }
+      }
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
+
+      this.speads[5].push(time);
+      let sum = this.speads[5].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[5].length;
+      this.avarageSpeads[5] = avarageTime;
+
+      this.surname = "";
+      this.group = "";
+    },
+    pyramidalSort() {
+      let time = performance.now();
+      let sh = 0,
+        b;
+
+      if (this.boolean === false) {
+        sort("surname");
+      } else {
+        sort("group");
+      }
+      // Смещение
+      function sort(sortBy) {
+        do {
+          b = false;
+          for (let i = 0; i < arr.length; i++) {
+            if (i * 2 + 2 + sh < arr.length) {
+              if (
+                arr[i + sh][sortBy] > /*<*/ arr[i * 2 + 1 + sh][sortBy] ||
+                arr[i + sh][sortBy] > /*<*/ arr[i * 2 + 2 + sh][sortBy]
+              ) {
+                if (
+                  arr[i * 2 + 1 + sh][sortBy] <
+                  /*>*/ arr[i * 2 + 2 + sh][sortBy]
+                ) {
+                  [arr[i + sh], arr[i * 2 + 1 + sh]] = [
+                    arr[i * 2 + 1 + sh],
+                    arr[i + sh],
+                  ];
+                  b = true;
+                } else if (
+                  arr[i * 2 + 2 + sh][sortBy] <
+                  /*>*/ arr[i * 2 + 1 + sh][sortBy]
+                ) {
+                  [arr[i + sh], arr[i * 2 + 2 + sh]] = [
+                    arr[i * 2 + 2 + sh],
+                    arr[i + sh],
+                  ];
+                  b = true;
+                }
+              }
+              // Дополнительная проверка для последних двух элементов;
+              // с её помощью можно отсортировать пирамиду
+              // состоящую всего лишь из трёх элементов
+              if (
+                arr[i * 2 + 2 + sh][sortBy] < /*>*/ arr[i * 2 + 1 + sh][sortBy]
+              ) {
+                [arr[i * 2 + 1 + sh], arr[i * 2 + 2 + sh]] = [
+                  arr[i * 2 + 2 + sh],
+                  arr[i * 2 + 1 + sh],
+                ];
+                b = true;
+              }
+            } else if (i * 2 + 1 + sh < arr.length) {
+              if (arr[i + sh][sortBy] > /*<*/ arr[i * 2 + 1 + sh][sortBy]) {
+                [arr[i + sh], arr[i * 2 + 1 + sh]] = [
+                  arr[i * 2 + 1 + sh],
+                  arr[i + sh],
+                ];
+                b = true;
+              }
+            }
+          }
+          if (!b) ++sh; // Смещение увеличивается, когда на текущем этапе сортировать больше нечего
+        } while (sh + 2 < arr.length); // Конец сортировки
+      }
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
+
+      this.speads[6].push(time);
+      let sum = this.speads[6].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[6].length;
+      this.avarageSpeads[6] = avarageTime;
+
+      this.surname = "";
+      this.group = "";
+    },
+    defaultSort() {
+      let time = performance.now();
+      arr.sort((a, b) => a - b);
+      time = performance.now() - time;
+      console.log("Время выполнения = ", time);
+
+      this.speads[7].push(time);
+      let sum = this.speads[7].reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      );
+      let avarageTime = sum / this.speads[7].length;
+      this.avarageSpeads[7] = avarageTime;
 
       this.surname = "";
       this.group = "";
