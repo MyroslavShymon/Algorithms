@@ -1,7 +1,19 @@
 <template>
   <div class="wrapper">
-    <!-- <div class="data-wrapper">
-      <Chart :spead="avarageSpeads" v-if="isHidden"></Chart>
+    <div class="data-wrapper">
+      <validation-observer v-slot="{ invalid }">
+        <form class="md-layout" @submit.prevent="validatePerson">
+          <FirstNameInput />
+          <md-button
+            type="submit"
+            class="md-primary"
+            variant="success"
+            :disabled="invalid"
+            >Create person</md-button
+          >
+        </form>
+      </validation-observer>
+      <!-- <Chart :spead="avarageSpeads" v-if="isHidden"></Chart>
       <div>
         <h2>{{ chosingSortText }}</h2>
         <form class="form" action="" @submit.prevent="add">
@@ -60,18 +72,30 @@
             >
           </div>
         </form>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
     <PersonsTable :persons="persons" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { useStore, useModule } from "vuex-simple";
+import { useStore } from "vuex-simple";
 import { MyStore } from "@/store/store/store";
 import Person from "@/store/modules/person";
 import PersonsTable from "@/components/PersonsTable.vue";
+import FirstNameInput from "../components/inputs/FirstNameInput.vue";
+import { extend, setInteractionMode, ValidationObserver } from "vee-validate";
+import { required, max } from "vee-validate/dist/rules";
+setInteractionMode("eager");
+extend("required", {
+  ...required,
+  message: "You may not left {_field_} empty",
+});
+extend("max", {
+  ...max,
+  message: "{_field_} should not exceed {length} characters",
+});
 
 @Component({
   data() {
@@ -80,11 +104,14 @@ import PersonsTable from "@/components/PersonsTable.vue";
     };
   },
   components: {
+    FirstNameInput,
     PersonsTable,
+    ValidationObserver,
   },
 })
 export default class MyComponent extends Vue {
   private persons!: Person[];
+
   // get the module instance from the created store
   public store: MyStore = useStore(this.$store);
   // get the module instance with the given namespace
@@ -100,9 +127,26 @@ export default class MyComponent extends Vue {
 
   mounted() {
     // this.callPersons();
+
     this.persons = this.readPersonsGetter;
   }
-
+  public validatePerson() {
+    const pers = new Person(
+      { first: "this.firstName", last: "fvdfb" },
+      {
+        street: {
+          number: 8,
+          name: "string",
+        },
+        city: "string",
+        state: "string",
+        country: "string",
+      },
+      "dffv",
+      { date: new Date(), age: 7 }
+    );
+    this.store.persons.addPerson(pers);
+  }
   // public callPersons(): void {
   //   this.store.persons.getUsers();
   // }
@@ -110,6 +154,12 @@ export default class MyComponent extends Vue {
 </script>
 
 <style scoped>
+.md-field {
+  margin: 4px 0 4px;
+}
+.error {
+  color: #ff5252;
+}
 .wrapper {
   display: flex;
   flex-direction: column;

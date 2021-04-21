@@ -1,4 +1,4 @@
-import { Action, Getter, State } from "vuex-simple";
+import { Action, Getter, Mutation, State } from "vuex-simple";
 import Person from "./person";
 
 export class makePerson {
@@ -19,6 +19,11 @@ export class makePerson {
       );
       this._result.push(person);
     });
+  }
+
+  @Mutation()
+  public addPerson(pushedPerson: Person) {
+    this._result.push(pushedPerson);
   }
 
   @Getter()

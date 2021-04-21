@@ -48,7 +48,6 @@ enum headerTitles {
   "Years registered",
   "Date of registration",
 }
-console.log(headerTitles["Name"]);
 
 @Component({
   data() {

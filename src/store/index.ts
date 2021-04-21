@@ -21,6 +21,7 @@ export default createVuexStore(instance, {
 // instance.bar.foo2.increment();
 // instance.bar.foo2.increment();
 instance.persons.getUsers();
+
 // console.log(instance.bar.foo2);
 // console.log(instance.bar.total);
 // instance.Person.getUsers();
