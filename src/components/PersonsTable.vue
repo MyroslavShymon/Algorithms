@@ -69,6 +69,7 @@ export default class PersonTable extends Vue {
     if (typeof headerTitle !== "number") return headerTitle;
   }
   //   mounted(): void {
+
   //     if (this.$refs.headTitle) {
   //       console.log(((this.$refs.headTitle as Vue).$el as HTMLElement).innerHTML);
   //     }
