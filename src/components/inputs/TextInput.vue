@@ -15,8 +15,9 @@
         :name="dataToValid"
         :id="dataToValid"
         :autocomplete="dataToValid"
-        v-model="lastName"
+        v-model="vModelData"
       />
+      {{ vModelData }}
       <!-- v-model="vModelData" -->
       <!-- :disabled="sending" -->
       <span style="display: block">{{ firstNameOut }}</span>
@@ -37,6 +38,12 @@ import { useStore } from "vuex-simple";
 
 type invalid = { invalid: boolean };
 @Component({
+  data() {
+    return {
+      //     responses: ["firstName", "lastName"],
+      vModelData: "",
+    };
+  },
   components: {
     ValidationProvider,
   },
@@ -44,11 +51,13 @@ type invalid = { invalid: boolean };
 export default class TextInput extends Vue {
   public firstName = "";
   public lastName = "";
+  public arr = ["firstName", "lastName"];
   private declarated!: boolean;
-  private vModelData = this.transformDataToValid("camelCase");
+  public vModelData!: string;
   @Prop() private invalid!: invalid;
   @Prop() private dataToValid!: string;
   mounted() {
+    this.vModelData = this.transformDataToValid("camelCase");
     console.log("this.vModelData", this.vModelData);
   }
   private helpTransformText(word: number): string {
