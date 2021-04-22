@@ -128,7 +128,7 @@ export default class MyComponent extends Vue {
     return this.store.persons.persons;
   }
   private get btnShow(): boolean {
-    this.firstName = this.store.persons.name;
+    this.firstName = this.store.persons.firstName;
     this.lastName = this.store.persons.lastName;
     if (this.firstName.length === 0 || this.lastName.length === 0) {
       return true;
@@ -147,7 +147,10 @@ export default class MyComponent extends Vue {
     console.log("this.store.persons.name", this.store.persons);
 
     const pers = new Person(
-      { first: this.store.persons.name, last: "fvdfb" },
+      {
+        first: this.store.persons.firstName,
+        last: this.store.persons.lastName,
+      },
       {
         street: {
           number: 8,

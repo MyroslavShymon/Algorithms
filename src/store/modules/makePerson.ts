@@ -5,7 +5,7 @@ export class makePerson {
   @State()
   private _result: Person[] = [];
   @State()
-  public name = "";
+  public firstName = "";
   @State()
   public lastName = "";
 

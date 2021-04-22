@@ -15,10 +15,11 @@
         :name="dataToValid"
         :id="dataToValid"
         :autocomplete="dataToValid"
-        :v-model="transformDataToValid('camelCase')"
+        v-model="lastName"
       />
+      <!-- v-model="vModelData" -->
       <!-- :disabled="sending" -->
-      <span style="display: none">{{ textInputOut }}</span>
+      <span style="display: block">{{ firstNameOut }}</span>
     </md-field>
     <div :state="valid">
       <span class="error" v-for="(error, index) in errors" :key="index">
@@ -35,22 +36,21 @@ import { MyStore } from "@/store/store/store";
 import { useStore } from "vuex-simple";
 
 type invalid = { invalid: boolean };
-// type TFields = "firstName" | "lastName";
 @Component({
   components: {
     ValidationProvider,
   },
 })
 export default class TextInput extends Vue {
-  // private fieldModelName: string = "";
-  // created() {
-  //   this.fieldModelName = this.transformDataToValid("camelCase");
-  // }
-  public [this.transformDataToValid("camelCase")]!: string;
+  public firstName = "";
+  public lastName = "";
   private declarated!: boolean;
+  private vModelData = this.transformDataToValid("camelCase");
   @Prop() private invalid!: invalid;
   @Prop() private dataToValid!: string;
-
+  mounted() {
+    console.log("this.vModelData", this.vModelData);
+  }
   private helpTransformText(word: number): string {
     return [...this.dataToValid.split("-")[word]]
       .filter((_: string, index: number): boolean => index !== 0)
@@ -88,13 +88,7 @@ export default class TextInput extends Vue {
 
   public store: MyStore = useStore(this.$store);
 
-  // private get fieldModelNameGetting(): string {
-  //   return this.fieldModelName;
-  // }
-
   private get readClasses(): boolean {
-    // console.log('["this.fieldModelNameGetting"]', this.fieldModelName);
-
     if (
       this.declarated === undefined &&
       this[this.transformDataToValid("camelCase")] === ""
@@ -109,7 +103,7 @@ export default class TextInput extends Vue {
     } else return this.invalid.invalid;
   }
 
-  public get textInputOut(): string {
+  public get firstNameOut(): string {
     this.store.persons[this.transformDataToValid("camelCase")] = this[
       this.transformDataToValid("camelCase")
     ];
