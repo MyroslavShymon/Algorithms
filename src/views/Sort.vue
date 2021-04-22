@@ -3,14 +3,15 @@
     <div class="data-wrapper">
       <validation-observer v-slot="{ invalid }">
         <form class="md-layout" @submit.prevent="validatePerson">
-          <FirstNameInput :invalid="{ invalid }" />
-          <!-- @firstNameAdd="showFirstName" -->
-          <!-- v-on:addFirstName="toggleHeader($event)" -->
+          <TextInput :invalid="{ invalid }" data-to-valid="first-name" />
+          <TextInput :invalid="{ invalid }" data-to-valid="last-name" />
+          <!-- data-to-valid-text="Last name"
+            data-to-valid-text="First name" -->
           <md-button
             type="submit"
             class="md-raised md-primary"
             variant="success"
-            :disabled="invalid"
+            :disabled="invalid && btnShow"
             >Create person</md-button
           >
         </form>
@@ -81,15 +82,14 @@
 </template>
 
 <script lang="ts">
+import TextInput from "../components/inputs/TextInput.vue";
 import { Component, Vue } from "vue-property-decorator";
 import { useStore } from "vuex-simple";
 import { MyStore } from "@/store/store/store";
 import Person from "@/store/modules/person";
 import PersonsTable from "@/components/PersonsTable.vue";
-import FirstNameInput from "../components/inputs/FirstNameInput.vue";
 import { extend, setInteractionMode, ValidationObserver } from "vee-validate";
 import { required, max } from "vee-validate/dist/rules";
-import store from "@/store";
 setInteractionMode("eager");
 extend("required", {
   ...required,
@@ -104,39 +104,47 @@ extend("max", {
   data() {
     return {
       persons: [],
+      firstName: "",
+      lastName: "",
     };
   },
   components: {
-    FirstNameInput,
+    TextInput,
     PersonsTable,
     ValidationObserver,
   },
 })
 export default class MyComponent extends Vue {
   private persons!: Person[];
+  public store: MyStore = useStore(this.$store);
+  private firstName!: string;
+  private lastName!: string;
 
   // get the module instance from the created store
-  public store: MyStore = useStore(this.$store);
   // get the module instance with the given namespace
   // public foo1?: FooModule = useModule(this.$store, ["bar", "foo1"]);
 
-  public get readState(): string {
-    return this.store.version;
-  }
-  showFirstName(data) {
-    console.log("validatePerson(data)", data);
-  }
   private get readPersonsGetter(): Person[] {
     return this.store.persons.persons;
   }
+  private get btnShow(): boolean {
+    this.firstName = this.store.persons.name;
+    this.lastName = this.store.persons.lastName;
+    if (this.firstName.length === 0 || this.lastName.length === 0) {
+      return true;
+    } else if (this.firstName.length <= 20 || this.lastName.length <= 20) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   mounted() {
-    // this.callPersons();
-
     this.persons = this.readPersonsGetter;
   }
+
   public validatePerson() {
-    // console.log(this.showFirstName);
+    console.log("this.store.persons.name", this.store.persons);
 
     const pers = new Person(
       { first: this.store.persons.name, last: "fvdfb" },
@@ -154,9 +162,6 @@ export default class MyComponent extends Vue {
     );
     this.store.persons.addPerson(pers);
   }
-  // public callPersons(): void {
-  //   this.store.persons.getUsers();
-  // }
 }
 </script>
 

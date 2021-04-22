@@ -4,7 +4,10 @@ import Person from "./person";
 export class makePerson {
   @State()
   private _result: Person[] = [];
-  public name!: string;
+  @State()
+  public name = "";
+  @State()
+  public lastName = "";
 
   @Action()
   public async getUsers(): Promise<void> {
