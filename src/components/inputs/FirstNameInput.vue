@@ -4,15 +4,14 @@
     name="firstName"
     rules="required|max:20"
   >
-    {{ invalid }} | {{ readClasses }}
     <md-field
+      :state="valid"
       label="First name: "
       :class="{
-        'md-invalid':
-          (readClasses.invalid && invalid) === true ? invalid : false,
+        'md-invalid': readClasses,
       }"
     >
-      <!--  -->
+      <!-- (invalid && readClasses.invalid) === true ? invalid : false, -->
       <label for="first-name">First name</label>
       <md-input
         name="first-name"
@@ -20,7 +19,11 @@
         autocomplete="family-name"
         v-model="firstName"
         :disabled="sending"
-      />
+      />{{ readClasses }}|{{ invalid }}
+      <!-- {{ invalid }}|{{ !readClasses.invalid }}|{{
+        invalid || !readClasses.invalid
+      }}|{{ (invalid || !readClasses.invalid) === true ? true : false }} -->
+      <span style="display: none">{{ firstNameOut }}</span>
     </md-field>
     <div :state="valid">
       <span class="error" v-for="(error, index) in errors" :key="index">
@@ -31,26 +34,46 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 import { ValidationProvider } from "vee-validate";
+import { MyStore } from "@/store/store/store";
+import { useStore } from "vuex-simple";
 
-type classes = { invalid: boolean };
+type invalid = { invalid: boolean };
 @Component({
   components: {
     ValidationProvider,
   },
 })
 export default class FirstNameInput extends Vue {
-  private firstName = "";
-  private classes!: classes;
-  private get readClasses(): classes {
-    let classTo: classes = { invalid: true };
-    if (this.firstName === "") {
-      classTo = this.classes = {
-        invalid: false,
-      };
-    }
-    return classTo;
+  public firstName = "";
+  private declarated!: boolean;
+  @Prop() private invalid!: invalid;
+
+  public store: MyStore = useStore(this.$store);
+
+  private get readClasses(): boolean {
+    if (this.declarated === undefined && this.firstName === "") {
+      this.declarated = true;
+      return false;
+    } else if (this.declarated === true && this.firstName === "") {
+      return true;
+    } else return this.invalid.invalid;
+  }
+
+  public get firstNameOut() {
+    this.store.persons.name = this.firstName;
+    console.log(this.store.persons.name);
+    return this.firstName;
   }
 }
 </script>
+
+<style scoped>
+.md-field {
+  margin: 4px 0 4px;
+}
+.error {
+  color: #ff5252;
+}
+</style>

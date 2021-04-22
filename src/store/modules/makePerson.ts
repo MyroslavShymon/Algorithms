@@ -4,6 +4,7 @@ import Person from "./person";
 export class makePerson {
   @State()
   private _result: Person[] = [];
+  public name!: string;
 
   @Action()
   public async getUsers(): Promise<void> {
@@ -25,6 +26,10 @@ export class makePerson {
   public addPerson(pushedPerson: Person) {
     this._result.push(pushedPerson);
   }
+  // @Mutation()
+  // public set setName(name: string) {
+  //   this._name = name;
+  // }
 
   @Getter()
   public get persons(): Person[] {

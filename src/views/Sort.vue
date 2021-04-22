@@ -3,10 +3,12 @@
     <div class="data-wrapper">
       <validation-observer v-slot="{ invalid }">
         <form class="md-layout" @submit.prevent="validatePerson">
-          <FirstNameInput />
+          <FirstNameInput :invalid="{ invalid }" />
+          <!-- @firstNameAdd="showFirstName" -->
+          <!-- v-on:addFirstName="toggleHeader($event)" -->
           <md-button
             type="submit"
-            class="md-primary"
+            class="md-raised md-primary"
             variant="success"
             :disabled="invalid"
             >Create person</md-button
@@ -87,6 +89,7 @@ import PersonsTable from "@/components/PersonsTable.vue";
 import FirstNameInput from "../components/inputs/FirstNameInput.vue";
 import { extend, setInteractionMode, ValidationObserver } from "vee-validate";
 import { required, max } from "vee-validate/dist/rules";
+import store from "@/store";
 setInteractionMode("eager");
 extend("required", {
   ...required,
@@ -120,7 +123,9 @@ export default class MyComponent extends Vue {
   public get readState(): string {
     return this.store.version;
   }
-
+  showFirstName(data) {
+    console.log("validatePerson(data)", data);
+  }
   private get readPersonsGetter(): Person[] {
     return this.store.persons.persons;
   }
@@ -131,8 +136,10 @@ export default class MyComponent extends Vue {
     this.persons = this.readPersonsGetter;
   }
   public validatePerson() {
+    // console.log(this.showFirstName);
+
     const pers = new Person(
-      { first: "this.firstName", last: "fvdfb" },
+      { first: this.store.persons.name, last: "fvdfb" },
       {
         street: {
           number: 8,
@@ -154,12 +161,6 @@ export default class MyComponent extends Vue {
 </script>
 
 <style scoped>
-.md-field {
-  margin: 4px 0 4px;
-}
-.error {
-  color: #ff5252;
-}
 .wrapper {
   display: flex;
   flex-direction: column;
