@@ -3,8 +3,9 @@
     <div class="data-wrapper">
       <validation-observer v-slot="{ invalid }">
         <form class="md-layout" @submit.prevent="validatePerson">
-          <TextInput :invalid="{ invalid }" data-to-valid="first-name" />
-          <TextInput :invalid="{ invalid }" data-to-valid="last-name" />
+          <FirstNameInput :invalid="{ invalid }" />
+          <LastNameInput :invalid="{ invalid }" />
+          <!-- <FirstNameInput :invalid="{ invalid }" data-to-valid="last-name" /> -->
           <!-- data-to-valid-text="Last name"
             data-to-valid-text="First name" -->
           <md-button
@@ -82,7 +83,8 @@
 </template>
 
 <script lang="ts">
-import TextInput from "../components/inputs/TextInput.vue";
+import FirstNameInput from "../components/inputs/FirstNameInput.vue";
+import LastNameInput from "../components/inputs/LastNameInput.vue";
 import { Component, Vue } from "vue-property-decorator";
 import { useStore } from "vuex-simple";
 import { MyStore } from "@/store/store/store";
@@ -109,7 +111,8 @@ extend("max", {
     };
   },
   components: {
-    TextInput,
+    FirstNameInput,
+    LastNameInput,
     PersonsTable,
     ValidationObserver,
   },
