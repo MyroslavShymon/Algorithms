@@ -7,7 +7,7 @@
     <md-field
       :state="valid"
       :class="{
-        'md-invalid': resultClass && invalid,
+        'md-invalid': readClasses && !valid,
       }"
     >
       <label for="last-name">Last name</label>
@@ -17,6 +17,7 @@
         autocomplete="last-name"
         v-model="lastName"
       />
+      <!-- :disabled="sending" -->
       <span style="display: none">{{ lastNameOut }}</span>
     </md-field>
     <div :state="valid">
@@ -28,11 +29,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Mixins } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 import { ValidationProvider } from "vee-validate";
 import { MyStore } from "@/store/store/store";
 import { useStore } from "vuex-simple";
-import ProjectMixin from "@/mixins/ProjectMixin";
 
 type invalid = { invalid: boolean };
 @Component({
@@ -40,15 +40,25 @@ type invalid = { invalid: boolean };
     ValidationProvider,
   },
 })
-export default class LastNameInput extends Mixins(ProjectMixin) {
+export default class LastNameInput extends Vue {
   public lastName = "";
-  public resultClass = false;
+  private declarated!: boolean;
   @Prop() private invalid!: invalid;
   public store: MyStore = useStore(this.$store);
 
+  private get readClasses(): boolean {
+    if (this.declarated === undefined && this.lastName === "") {
+      this.declarated = true;
+      return false;
+    } else {
+      this.declarated === true && this.lastName === "";
+      return true;
+    }
+  }
+
   public get lastNameOut(): string {
+    console.log("this.readClasses |||| LastName", this.readClasses);
     this.store.persons.lastName = this.lastName;
-    this.resultClass = this.readClasses;
     return this.store.persons.lastName;
   }
 }

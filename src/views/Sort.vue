@@ -3,11 +3,8 @@
     <div class="data-wrapper">
       <validation-observer v-slot="{ invalid }">
         <form class="md-layout" @submit.prevent="validatePerson">
-          <FirstNameInput :invalid="{ invalid }" />
-          <LastNameInput :invalid="{ invalid }" />
-          <!-- <FirstNameInput :invalid="{ invalid }" data-to-valid="last-name" /> -->
-          <!-- data-to-valid-text="Last name"
-            data-to-valid-text="First name" -->
+          <FirstNameInput />
+          <LastNameInput />
           <md-button
             type="submit"
             class="md-raised md-primary"
@@ -135,7 +132,7 @@ export default class MyComponent extends Vue {
     this.lastName = this.store.persons.lastName;
     if (this.firstName.length === 0 || this.lastName.length === 0) {
       return true;
-    } else if (this.firstName.length <= 20 || this.lastName.length <= 20) {
+    } else if (this.firstName.length <= 20 && this.lastName.length <= 20) {
       return false;
     } else {
       return true;
