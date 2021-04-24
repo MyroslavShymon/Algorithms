@@ -13,11 +13,17 @@ export class makePerson {
   @State()
   public email = "";
   @State()
+  public validEmail = false;
+  @State()
   public country = "";
   @State()
-  public yearRegisterd = "";
+  public yearsRegistered = 0;
   @State()
-  public streetNumber = "";
+  public validYearsRegistered = false;
+  @State()
+  public validStreetNumber = false;
+  @State()
+  public streetNumber = 1;
   @State()
   public streetName = "";
   @State()

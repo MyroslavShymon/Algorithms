@@ -9,6 +9,9 @@
           <CountryInput />
           <StateInput />
           <StreetNameInput />
+          <EmailInput />
+          <StreetNumberInput />
+          <YearsRegisteredInput />
           <md-button
             type="submit"
             class="md-raised md-primary"
@@ -90,13 +93,23 @@ import CityInput from "../components/inputs/CityInput.vue";
 import CountryInput from "../components/inputs/CountryInput.vue";
 import StateInput from "../components/inputs/StateInput.vue";
 import StreetNameInput from "../components/inputs/StreetNameInput.vue";
+import EmailInput from "../components/inputs/EmailInput.vue";
+import StreetNumberInput from "../components/inputs/StreetNumberInput.vue";
+import YearsRegisteredInput from "../components/inputs/YearsRegisteredInput.vue";
+
 import { Component, Vue } from "vue-property-decorator";
 import { useStore } from "vuex-simple";
 import { MyStore } from "@/store/store/store";
 import Person from "@/store/modules/person";
 import PersonsTable from "@/components/PersonsTable.vue";
 import { extend, setInteractionMode, ValidationObserver } from "vee-validate";
-import { required, max } from "vee-validate/dist/rules";
+import {
+  required,
+  max,
+  email,
+  numeric,
+  min_value,
+} from "vee-validate/dist/rules";
 setInteractionMode("eager");
 extend("required", {
   ...required,
@@ -105,6 +118,18 @@ extend("required", {
 extend("max", {
   ...max,
   message: "{_field_} should not exceed {length} characters",
+});
+extend("email", {
+  ...email,
+  message: "{_value_} is not a valid email",
+});
+extend("numeric", {
+  ...numeric,
+  message: "{_value_} is not a valid number",
+});
+extend("min_value", {
+  ...min_value,
+  message: "{_value_} is less then 1",
 });
 
 @Component({
@@ -116,14 +141,20 @@ extend("max", {
       city: "",
       country: "",
       streetName: "",
+      email: "",
+      streetNumber: 1,
+      yearsRegistered: 0,
     };
   },
   components: {
     FirstNameInput,
     LastNameInput,
     CityInput,
+    EmailInput,
     CountryInput,
     StateInput,
+    StreetNumberInput,
+    YearsRegisteredInput,
     StreetNameInput,
     PersonsTable,
     ValidationObserver,
@@ -138,10 +169,9 @@ export default class MyComponent extends Vue {
   private country!: string;
   private state!: string;
   private streetName!: string;
-
-  // get the module instance from the created store
-  // get the module instance with the given namespace
-  // public foo1?: FooModule = useModule(this.$store, ["bar", "foo1"]);
+  private email!: string;
+  private streetNumber!: number;
+  private yearsRegistered!: number;
 
   private get readPersonsGetter(): Person[] {
     return this.store.persons.persons;
@@ -153,12 +183,17 @@ export default class MyComponent extends Vue {
     this.country = this.store.persons.country;
     this.state = this.store.persons.state;
     this.streetName = this.store.persons.streetName;
+    this.email = this.store.persons.email;
+    this.streetNumber = this.store.persons.streetNumber;
+    this.yearsRegistered = this.store.persons.yearsRegistered;
+
     if (
       this.firstName.length === 0 ||
       this.lastName.length === 0 ||
       this.country.length === 0 ||
       this.state.length === 0 ||
       this.streetName.length === 0 ||
+      this.email.length === 0 ||
       this.city.length === 0
     ) {
       return true;
@@ -168,6 +203,9 @@ export default class MyComponent extends Vue {
       this.country.length <= 20 &&
       this.state.length <= 20 &&
       this.streetName.length <= 20 &&
+      this.store.persons.validEmail === true &&
+      this.store.persons.validStreetNumber === true &&
+      this.store.persons.validYearsRegistered === true &&
       this.city.length <= 20
     ) {
       return false;
@@ -188,15 +226,15 @@ export default class MyComponent extends Vue {
       },
       {
         street: {
-          number: 8,
+          number: this.store.persons.streetNumber,
           name: this.store.persons.streetName,
         },
         city: this.store.persons.city,
         state: this.store.persons.state,
         country: this.store.persons.country,
       },
-      "dffv",
-      { date: new Date(), age: 7 }
+      this.store.persons.email,
+      { date: new Date(), age: this.store.persons.yearsRegistered }
     );
     this.store.persons.addPerson(pers);
   }

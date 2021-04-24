@@ -11,7 +11,7 @@
       }"
     >
       <label for="city">City name</label>
-      <md-input name="city" id="city" autocomplete="city" v-model="city" />
+      <md-input name="city" id="city" autocomplete="city" v-model.trim="city" />
       <!-- :disabled="sending" -->
       <span style="display: none">{{ cityNameOut }}</span>
     </md-field>

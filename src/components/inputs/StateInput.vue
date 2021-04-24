@@ -11,7 +11,12 @@
       }"
     >
       <label for="state">State name</label>
-      <md-input name="state" id="state" autocomplete="state" v-model="state" />
+      <md-input
+        name="state"
+        id="state"
+        autocomplete="state"
+        v-model.trim="state"
+      />
       <!-- :disabled="sending" -->
       <span style="display: none">{{ stateNameOut }}</span>
     </md-field>

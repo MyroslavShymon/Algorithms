@@ -15,7 +15,7 @@
         name="last-name"
         id="last-name"
         autocomplete="last-name"
-        v-model="lastName"
+        v-model.trim="lastName"
       />
       <!-- :disabled="sending" -->
       <span style="display: none">{{ lastNameOut }}</span>
@@ -57,7 +57,6 @@ export default class LastNameInput extends Vue {
   }
 
   public get lastNameOut(): string {
-    console.log("this.readClasses |||| LastName", this.readClasses);
     this.store.persons.lastName = this.lastName;
     return this.store.persons.lastName;
   }

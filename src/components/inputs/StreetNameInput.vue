@@ -15,7 +15,7 @@
         name="street"
         id="street"
         autocomplete="street"
-        v-model="street"
+        v-model.trim="street"
       />
       <!-- :disabled="sending" -->
       <span style="display: none">{{ streetNameOut }}</span>

@@ -22,7 +22,8 @@
         <td>{{ person.location.city }}</td>
         <td>{{ person.location.street.name }}</td>
         <td>
-          {{ calcStreetNumber(person.location.street.number) }}
+          <!-- {{ calcStreetNumber(person.location.street.number) }} -->
+          {{ person.location.street.number }}
         </td>
         <td>{{ person.email }}</td>
         <td>{{ person.registered.age }}</td>
@@ -57,13 +58,13 @@ enum headerTitles {
 export default class PersonTable extends Vue {
   @Prop() private persons!: Person[];
 
-  public calcStreetNumber(streetNumber: number): number {
-    const numberToCalc = Math.round(streetNumber / 200);
-    numberToCalc === 0
-      ? (streetNumber = Math.floor(Math.random() * 100))
-      : (streetNumber = numberToCalc);
-    return streetNumber;
-  }
+  // public calcStreetNumber(streetNumber: number): number {
+  //   const numberToCalc = Math.round(streetNumber / 200);
+  //   numberToCalc === 0
+  //     ? (streetNumber = Math.floor(Math.random() * 100))
+  //     : (streetNumber = numberToCalc);
+  //   return streetNumber;
+  // }
   public iterateHeaderTitles(headerTitle: string | number): string | undefined {
     if (typeof headerTitle !== "number") return headerTitle;
   }

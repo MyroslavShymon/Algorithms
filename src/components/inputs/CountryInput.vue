@@ -15,7 +15,7 @@
         name="country"
         id="country"
         autocomplete="country"
-        v-model="country"
+        v-model.trim="country"
       />
       <!-- :disabled="sending" -->
       <span style="display: none">{{ countryNameOut }}</span>
