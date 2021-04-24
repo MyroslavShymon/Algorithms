@@ -1,17 +1,41 @@
 <template>
   <div class="wrapper">
     <div class="data-wrapper">
-      <validation-observer v-slot="{ invalid }">
+      <validation-observer v-slot="{ invalid }" class="form-wrapper">
         <form class="md-layout" @submit.prevent="validatePerson">
-          <FirstNameInput />
-          <LastNameInput />
-          <CityInput />
-          <CountryInput />
-          <StateInput />
-          <StreetNameInput />
-          <EmailInput />
-          <StreetNumberInput />
-          <YearsRegisteredInput />
+          <div class="input-wrapper">
+            <h3>Enter full name</h3>
+            <div class="inputs">
+              <FirstNameInput />
+              <LastNameInput />
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <h3>Enter your email address and year of registration</h3>
+            <div class="inputs">
+              <EmailInput />
+              <YearsRegisteredInput />
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <h3>Enter your location and street</h3>
+            <div class="inputs-location">
+              <div class="inputs">
+                <CityInput />
+                <CountryInput />
+                <StateInput />
+              </div>
+              <div class="inputs">
+                <StreetNameInput />
+                <StreetNumberInput />
+              </div>
+            </div>
+          </div>
+          <!-- <div class="input-wrapper">
+            <h2>Enter your street</h2>
+            <div class="inputs">
+            </div>
+          </div> -->
           <md-button
             type="submit"
             class="md-raised md-primary"
@@ -82,7 +106,7 @@
         </form>
       </div> -->
     </div>
-    <PersonsTable :persons="persons" />
+    <!-- <PersonsTable :persons="persons" /> -->
   </div>
 </template>
 
@@ -135,7 +159,7 @@ extend("min_value", {
 @Component({
   data() {
     return {
-      persons: [],
+      // persons: [],
       firstName: "",
       lastName: "",
       city: "",
@@ -161,7 +185,7 @@ extend("min_value", {
   },
 })
 export default class MyComponent extends Vue {
-  private persons!: Person[];
+  // private persons!: Person[];
   public store: MyStore = useStore(this.$store);
   private firstName!: string;
   private lastName!: string;
@@ -173,9 +197,9 @@ export default class MyComponent extends Vue {
   private streetNumber!: number;
   private yearsRegistered!: number;
 
-  private get readPersonsGetter(): Person[] {
-    return this.store.persons.persons;
-  }
+  // private get readPersonsGetter(): Person[] {
+  //   return this.store.persons.persons;
+  // }
   private get btnShow(): boolean {
     this.firstName = this.store.persons.firstName;
     this.lastName = this.store.persons.lastName;
@@ -214,9 +238,9 @@ export default class MyComponent extends Vue {
     }
   }
 
-  mounted() {
-    this.persons = this.readPersonsGetter;
-  }
+  // mounted() {
+  //   this.persons = this.readPersonsGetter;
+  // }
 
   public validatePerson() {
     const pers = new Person(
@@ -261,10 +285,41 @@ export default class MyComponent extends Vue {
   justify-content: space-around;
   width: 80%;
 }
-h2 {
-  text-align: center;
+h3 {
+  margin: 8px 3px 0;
 }
 textarea {
   width: 100%;
+}
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  align-items: flex-start;
+}
+.inputs {
+  width: 45%;
+}
+.inputs-location {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+.inputs {
+  width: 40%;
+}
+.md-layout {
+  flex-direction: column;
+  width: 100%;
+}
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.md-button {
+  margin: 4px 0 0 0;
 }
 </style>

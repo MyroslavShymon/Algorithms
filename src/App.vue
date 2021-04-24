@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/sort">Sort</router-link>
+      <router-link to="/">Sortable table</router-link> |
+      <router-link to="/sort-inputs">Sort inputs</router-link> |
+      <router-link to="/sort-graphik">Sort graphik</router-link>
     </div>
     <router-view />
   </div>
@@ -25,7 +26,7 @@
     color: #2c3e50;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #448aff;
     }
   }
 }

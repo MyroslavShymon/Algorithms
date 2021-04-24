@@ -28,10 +28,14 @@ export class makePerson {
   public streetName = "";
   @State()
   public state = "";
+  @State()
+  private _personsFromServer = 1;
 
   @Action()
   public async getUsers(): Promise<void> {
-    const response = await fetch("https://randomuser.me/api?results=10");
+    const response = await fetch(
+      `https://randomuser.me/api?results=${this._personsFromServer}`
+    );
     const object = await response.json();
     const persons = object.results;
     persons.forEach((person: Person) => {
@@ -49,13 +53,16 @@ export class makePerson {
   public addPerson(pushedPerson: Person) {
     this._result.push(pushedPerson);
   }
-  // @Mutation()
-  // public set setName(name: string) {
-  //   this._name = name;
-  // }
+  public set personsFromServer(count: number) {
+    this._personsFromServer = count;
+  }
 
   @Getter()
   public get persons(): Person[] {
     return this._result;
   }
+  // @Getter()
+  // public get personsFromServer(): number {
+  //   return this._personsFromServer;
+  // }
 }
