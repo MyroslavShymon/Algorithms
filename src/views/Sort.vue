@@ -5,6 +5,10 @@
         <form class="md-layout" @submit.prevent="validatePerson">
           <FirstNameInput />
           <LastNameInput />
+          <CityInput />
+          <CountryInput />
+          <StateInput />
+          <StreetNameInput />
           <md-button
             type="submit"
             class="md-raised md-primary"
@@ -82,6 +86,10 @@
 <script lang="ts">
 import FirstNameInput from "../components/inputs/FirstNameInput.vue";
 import LastNameInput from "../components/inputs/LastNameInput.vue";
+import CityInput from "../components/inputs/CityInput.vue";
+import CountryInput from "../components/inputs/CountryInput.vue";
+import StateInput from "../components/inputs/StateInput.vue";
+import StreetNameInput from "../components/inputs/StreetNameInput.vue";
 import { Component, Vue } from "vue-property-decorator";
 import { useStore } from "vuex-simple";
 import { MyStore } from "@/store/store/store";
@@ -105,11 +113,18 @@ extend("max", {
       persons: [],
       firstName: "",
       lastName: "",
+      city: "",
+      country: "",
+      streetName: "",
     };
   },
   components: {
     FirstNameInput,
     LastNameInput,
+    CityInput,
+    CountryInput,
+    StateInput,
+    StreetNameInput,
     PersonsTable,
     ValidationObserver,
   },
@@ -119,6 +134,10 @@ export default class MyComponent extends Vue {
   public store: MyStore = useStore(this.$store);
   private firstName!: string;
   private lastName!: string;
+  private city!: string;
+  private country!: string;
+  private state!: string;
+  private streetName!: string;
 
   // get the module instance from the created store
   // get the module instance with the given namespace
@@ -130,9 +149,27 @@ export default class MyComponent extends Vue {
   private get btnShow(): boolean {
     this.firstName = this.store.persons.firstName;
     this.lastName = this.store.persons.lastName;
-    if (this.firstName.length === 0 || this.lastName.length === 0) {
+    this.city = this.store.persons.city;
+    this.country = this.store.persons.country;
+    this.state = this.store.persons.state;
+    this.streetName = this.store.persons.streetName;
+    if (
+      this.firstName.length === 0 ||
+      this.lastName.length === 0 ||
+      this.country.length === 0 ||
+      this.state.length === 0 ||
+      this.streetName.length === 0 ||
+      this.city.length === 0
+    ) {
       return true;
-    } else if (this.firstName.length <= 20 && this.lastName.length <= 20) {
+    } else if (
+      this.firstName.length <= 20 &&
+      this.lastName.length <= 20 &&
+      this.country.length <= 20 &&
+      this.state.length <= 20 &&
+      this.streetName.length <= 20 &&
+      this.city.length <= 20
+    ) {
       return false;
     } else {
       return true;
@@ -144,8 +181,6 @@ export default class MyComponent extends Vue {
   }
 
   public validatePerson() {
-    console.log("this.store.persons.name", this.store.persons);
-
     const pers = new Person(
       {
         first: this.store.persons.firstName,
@@ -154,11 +189,11 @@ export default class MyComponent extends Vue {
       {
         street: {
           number: 8,
-          name: "string",
+          name: this.store.persons.streetName,
         },
-        city: "string",
-        state: "string",
-        country: "string",
+        city: this.store.persons.city,
+        state: this.store.persons.state,
+        country: this.store.persons.country,
       },
       "dffv",
       { date: new Date(), age: 7 }

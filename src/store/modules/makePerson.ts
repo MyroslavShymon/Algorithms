@@ -8,6 +8,20 @@ export class makePerson {
   public firstName = "";
   @State()
   public lastName = "";
+  @State()
+  public city = "";
+  @State()
+  public email = "";
+  @State()
+  public country = "";
+  @State()
+  public yearRegisterd = "";
+  @State()
+  public streetNumber = "";
+  @State()
+  public streetName = "";
+  @State()
+  public state = "";
 
   @Action()
   public async getUsers(): Promise<void> {
