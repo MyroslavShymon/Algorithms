@@ -12,15 +12,55 @@
         >Read persons</md-button
       >
     </div>
-    <div class="buttons-group">
-      <md-button class="md-raised md-primary" @click="save"
-        >Save persons</md-button
+    <form @submit.prevent="sort">
+      <div class="select-wrapper">
+        <md-field>
+          <label for="sort">Sort</label>
+          <md-select v-model="sortType" name="sort" id="sort" required>
+            <md-option value="Bubble">Bubble sort</md-option>
+            <md-option value="Shake">Shake sort</md-option>
+            <md-option value="Selection">Selection sort</md-option>
+            <md-option value="Insertion">Insertion sort</md-option>
+            <md-option value="Shell">Shell sort</md-option>
+            <md-option value="Quick">Quick sort</md-option>
+            <md-option value="Pyramidal">Pyramidal sort</md-option>
+            <md-option value="Default">Default sort</md-option>
+          </md-select>
+        </md-field>
+        <span v-if="showSelectError" class="error">The Sort is required</span>
+      </div>
+      <div class="select-wrapper">
+        <md-field>
+          <label for="field">Field to sort</label>
+          <md-select v-model="sortBy" name="field" id="field" required>
+            <md-option value="Bubble">First name</md-option>
+            <md-option value="Shake">Last name</md-option>
+            <md-option value="Selection">Country</md-option>
+            <md-option value="Insertion">Email</md-option>
+            <md-option value="Shell">City</md-option>
+            <md-option value="Quick">State</md-option>
+            <md-option value="Pyramidal">Street</md-option>
+            <md-option value="Default">Street number</md-option>
+            <md-option value="Default">Years registered</md-option>
+          </md-select>
+        </md-field>
+        <!-- <span v-if="showSelectError" class="error">The field is required</span> -->
+      </div>
+      <md-button class="md-raised md-primary" @click="sort" type="submit"
+        >Sort persons</md-button
       >
-      <md-button class="md-raised md-primary" @click="read"
-        >Read persons</md-button
-      >
-    </div>
-    <PersonsTable :persons="persons" />
+      <div class="buttons-group">
+        <md-button class="md-raised md-primary" @click="save"
+          >Save persons</md-button
+        >
+        <md-button class="md-raised md-primary" @click="read"
+          >Read persons</md-button
+        >
+      </div>
+      <PersonsTable v-if="persons.length !== 0" :persons="persons" />
+    </form>
+
+    <!-- {{ readPersonsGetter }}{{ readPersons }} -->
   </div>
 </template>
 
@@ -36,6 +76,8 @@ import { useStore } from "vuex-simple";
     return {
       persons: [],
       number: 1,
+      sortType: "",
+      sortBy: "",
     };
   },
   components: {
@@ -47,20 +89,28 @@ export default class Home extends Vue {
   private persons!: Person[];
   public store: MyStore = useStore(this.$store);
   private number!: number;
+  private sortType!: string;
+  private sortBy!: string;
+  private get readPersons(): Person[] {
+    return this.persons;
+  }
   private get readPersonsGetter(): Person[] {
     return this.store.persons.persons;
+  }
+  private get showSelectError(): boolean {
+    return this.sortType == "";
+  }
+  private sort() {
+    this.store.persons.bubbelSort();
+    this.persons = this.store.persons.persons;
   }
   private save(): void {
     const parsed = JSON.stringify(this.persons);
     localStorage.setItem("persons", parsed);
   }
   private read(): void {
-    console.log(
-      "JSON.parse(localStorage.getItem('persons')!",
-      JSON.parse(localStorage.getItem("persons")!)
-    );
     this.personsReaded = [...JSON.parse(localStorage.getItem("persons")!)];
-    this.personsReaded.forEach((personReaded): void => {
+    this.personsReaded.forEach((personReaded: Person): void => {
       this.store.persons.addPerson(
         new Person(
           personReaded[Object.keys(personReaded)[0]],
@@ -82,6 +132,15 @@ export default class Home extends Vue {
 </script>
 
 <style scoped>
+.select-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 40%;
+}
+.error {
+  color: #ff5252;
+}
 .wrapper {
   width: 90%;
   display: flex;
@@ -94,12 +153,18 @@ export default class Home extends Vue {
   display: flex;
 }
 .md-button {
-  padding: 1px 8px;
+  width: 200px;
 }
 h4 {
   margin: 0;
 }
+.md-field {
+  width: 80%;
+  margin: 10px 0 0 0;
+}
+form {
+  display: flex;
+  align-items: center;
+  width: 80%;
+}
 </style>
-
-function keyof(personReaded: Person): any { throw new Error("Function not
-implemented."); }

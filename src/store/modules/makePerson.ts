@@ -50,6 +50,24 @@ export class makePerson {
   }
 
   @Mutation()
+  public bubbelSort() {
+    // console.log("bubble", this._result);
+
+    let swap, temp;
+    do {
+      swap = false;
+      for (let index = 0; index < this._result.length - 1; index++) {
+        if (this._result[index].email > this._result[index + 1].email) {
+          temp = this._result[index];
+          this._result[index] = this._result[index + 1];
+          this._result[index + 1] = temp;
+          swap = true;
+        }
+      }
+    } while (swap == true);
+    console.log("bubble", this._result);
+  }
+  @Mutation()
   public addPerson(pushedPerson: Person) {
     this._result.push(pushedPerson);
   }
