@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
-import { user } from "./modules/user/index";
+import { users } from "./modules/users/index";
 
 export const store = createStore({
-  modules: { user },
+  modules: { users },
 });

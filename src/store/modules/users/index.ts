@@ -10,7 +10,7 @@ import { mutations } from "./mutations";
 import { actions } from "./actions";
 import { ActionsType, GettersType, MutationsType, StateType } from "./types";
 
-export const user: Module<StateType, any> = {
+export const users: Module<StateType, any> = {
   state,
   getters,
   mutations,
