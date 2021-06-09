@@ -74,24 +74,20 @@ import {
   ActionNames,
 } from "@/store/modules/users/types/actions-mutations-names-list";
 import { IUser } from "@/store/modules/users/types/interfaces";
-import ResultTable from "@/components/Sort/ResultTable.vue";
 
 @Options({
   name: "Buttons",
-  components: {
-    ResultTable,
-  },
   data() {
     return {
       usersCount: 0,
 
-      selectedField: "",
-      selectedLang: "",
-      selectedSortingType: "",
+      selectedField: null,
+      selectedLang: null,
+      selectedSortingType: null,
 
       languages: [
         { name: "C++", code: "cpp" },
-        { name: "TypeScript", code: "TypeScript" },
+        { name: "TypeScript", code: "ts" },
       ],
       fields: [
         { name: "First name", code: "firstName" },
@@ -110,6 +106,9 @@ import ResultTable from "@/components/Sort/ResultTable.vue";
 })
 export default class Buttons extends Vue {
   usersCount!: number;
+  selectedField!: { name: string; code: string };
+  selectedLang!: { name: string; code: string };
+  selectedSortingType!: { name: string; code: string };
 
   private addUser() {
     this.$store.commit(MutationNames.ADD_USER, {
@@ -136,6 +135,31 @@ export default class Buttons extends Vue {
   }
   private readUsers() {
     this.$store.state.users.users = JSON.parse(localStorage.users);
+  }
+  private sortUsers() {
+    if (
+      this.selectedField === null ||
+      this.selectedLang === null ||
+      this.selectedSortingType === null
+    ) {
+      return;
+    }
+
+    if (
+      this.selectedSortingType.code === "bubbleSort" &&
+      this.selectedLang.code === "ts"
+    ) {
+      this.$store.commit(MutationNames.BUBBLE_SORT, this.selectedField.code);
+      return;
+    }
+
+    if (
+      this.selectedSortingType.code === "bubbleSort" &&
+      this.selectedLang.code === "cpp"
+    ) {
+      console.log(this.selectedSortingType.code, this.selectedLang.code);
+      return;
+    }
   }
   private async setUsers() {
     this.$store.state.users.users = await this.$store.dispatch(
