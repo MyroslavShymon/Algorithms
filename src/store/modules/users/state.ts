@@ -9,4 +9,14 @@ export const state = {
   username: "",
   age: 0,
   users: [] as IUser[],
+  sortsTime: {
+    Bubble: [[], [], []],
+    Quick: [[], [], []],
+    Default: [[], [], []],
+  } as {
+    Bubble: number[][];
+    Quick: number[][];
+    Default: number[][];
+  },
+  JSON_str: "",
 };

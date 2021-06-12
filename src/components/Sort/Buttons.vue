@@ -145,20 +145,18 @@ export default class Buttons extends Vue {
       return;
     }
 
-    if (
-      this.selectedSortingType.code === "bubbleSort" &&
-      this.selectedLang.code === "ts"
-    ) {
-      this.$store.commit(MutationNames.BUBBLE_SORT, this.selectedField.code);
-      return;
-    }
-
-    if (
-      this.selectedSortingType.code === "bubbleSort" &&
-      this.selectedLang.code === "cpp"
-    ) {
-      console.log(this.selectedSortingType.code, this.selectedLang.code);
-      return;
+    switch (this.selectedSortingType.code) {
+      case "bubbleSort":
+        this.$store.commit(MutationNames.BUBBLE_SORT, {
+          field: this.selectedField.code,
+          language: this.selectedLang.code,
+        });
+        break;
+      case "quickSort":
+        console.log("quickSort");
+        break;
+      default:
+        break;
     }
   }
   private async setUsers() {

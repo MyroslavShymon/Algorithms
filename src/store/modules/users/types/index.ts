@@ -17,7 +17,10 @@ export type MutationsType<S = StateType> = {
   [MutationNames.SET_EMAIL](state: S, email: string): void;
   [MutationNames.SET_USERNAME](state: S, username: string): void;
   [MutationNames.SET_AGE](state: S, age: number): void;
-  [MutationNames.BUBBLE_SORT](state: S, field: string): void;
+  [MutationNames.BUBBLE_SORT](
+    state: S,
+    payload: { field: string; language: string }
+  ): void;
 };
 
 // Actions types and interfaces
