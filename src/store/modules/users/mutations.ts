@@ -47,6 +47,8 @@ export const mutations: MutationTree<StateType> & MutationsType = {
     state,
     payload: { field: string; language: string }
   ) {
+    state.language = payload.language;
+    state.field = payload.field;
     switch (payload.language) {
       case "cpp": {
         // let JSON_str,

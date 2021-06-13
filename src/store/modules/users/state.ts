@@ -8,6 +8,8 @@ export const state = {
   email: "",
   username: "",
   age: 0,
+  field: "",
+  language: "",
   users: [] as IUser[],
   sortsTime: {
     Bubble: [[], [], []],
@@ -20,4 +22,5 @@ export const state = {
   },
   JSON_str: "",
   error: "",
+  sortType: "",
 };

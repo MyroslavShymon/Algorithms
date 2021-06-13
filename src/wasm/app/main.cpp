@@ -2,6 +2,7 @@
 #include <iostream>
 #include <emscripten.h>
 #include <chrono>
+#include <typeinfo>
 
 #include "../src/User.cpp"
 #include "../src/sorts.cpp"
@@ -22,6 +23,8 @@ void sort(int len) {
 	const char** lastName_array = new const char* [len];
 	const char** email_array = new const char* [len];
 	const char** username_array = new const char* [len];
+	field = returnField();
+	cout<<"returnField!!!!!!!!"<<field<<"\n";
 
 	for (int i = 0; i < len; i++){
 		names_array[i] = returnFirstNames(i);
@@ -38,10 +41,18 @@ void sort(int len) {
 			ages.push(user.age);
 		  });
 		  return ages[$0];
+		  console.log("state.field",state.field);
 			}, i));
 	}
-
-	bubbleSort(users, len);
+//const { state } = require("../../src/store/modules/users/state");
+sortType = returnSortType();
+	if(sortType == "bubbleSort"){
+		bubbleSort(users, len);
+	}else if(sortType == "quickSort"){
+		bubbleSort(users, len);
+	}else{
+		cout<<"cpp default Sort";
+	}
 
 	formJSON(users, len);
 

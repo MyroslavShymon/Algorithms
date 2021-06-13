@@ -26,6 +26,14 @@ public:
 	int age() {
 		return _age;
 	}
+	std::string dynamicGetter(std::string field) {
+		if(field == "firstName"){return _firstName;}
+		else if(field == "lastName"){return _lastName;}
+		else if(field == "email"){return _email;}
+		else{
+		return _username;
+		}
+	}
 };
 
 #endif

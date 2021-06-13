@@ -44,7 +44,7 @@ void formJSON(User* users[], int len) {
 EM_JS(void, setTime,
 	(double time), {
 	   console.log("time bubble sort in cpp = ", time);
-	   time_bubble = time;
+	   state.sortsTime.Bubble[0].push(time);
 	});
 
 EM_JS(char*, returnFirstNames, (int i), {
@@ -54,6 +54,25 @@ EM_JS(char*, returnFirstNames, (int i), {
 		firstNames.push(user.firstName);
 	  });
 	  const greetings = firstNames[i];
+	  const byteCount = lengthBytesUTF8(greetings) + 1;
+
+	  const greetingsPointer = _malloc(byteCount);
+	  stringToUTF8(greetings, greetingsPointer, byteCount);
+
+	  return greetingsPointer;
+	});
+EM_JS(char*, returnField, (), {
+	  const greetings = state.field;
+	  const byteCount = lengthBytesUTF8(greetings) + 1;
+
+	  const greetingsPointer = _malloc(byteCount);
+	  stringToUTF8(greetings, greetingsPointer, byteCount);
+
+	  return greetingsPointer;
+	});
+EM_JS(char*, returnSortType, (), {
+	  const greetings = state.sortType;
+	  console.log("state.sortType cpp", state.sortType);
 	  const byteCount = lengthBytesUTF8(greetings) + 1;
 
 	  const greetingsPointer = _malloc(byteCount);

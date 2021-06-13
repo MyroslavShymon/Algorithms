@@ -145,6 +145,8 @@ export default class Buttons extends Vue {
       return;
     }
 
+    this.$store.state.users.sortType = this.selectedSortingType.code;
+
     switch (this.selectedSortingType.code) {
       case "bubbleSort":
         this.$store.commit(MutationNames.BUBBLE_SORT, {
