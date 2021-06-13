@@ -21,7 +21,13 @@ void formJSON(User* users[], int len) {
 		stringToFormJson.append(username);
 		stringToFormJson.append("','age':'");
 		stringToFormJson.append(age);
-		stringToFormJson.append("'},");
+		if (i == len - 1)
+		{
+			stringToFormJson.append("'}");
+		}
+		else{
+			stringToFormJson.append("'},");
+		}
 	}
 	stringToFormJson.append("]");
 	JSON = stringToFormJson;
@@ -29,10 +35,9 @@ void formJSON(User* users[], int len) {
 	char char_array[n + 1];
 	strcpy(char_array, stringToFormJson.c_str());
 	EM_ASM_({
-	  JSON_str = UTF8ToString($0);
-	//   state.users = UTF8ToString($0);
-	JSON.parse(JSON.stringify(JSON_str))
-	  console.log('JSON ' + JSON_str);
+	  	state.JSON_str = UTF8ToString($0);
+        JSON.parse(JSON.stringify(state.JSON_str));
+        console.log("JSON " + state.JSON_str);
 	}, char_array);
 }
 
@@ -43,6 +48,7 @@ EM_JS(void, setTime,
 	});
 
 EM_JS(char*, returnFirstNames, (int i), {
+	//const { state } = require("../../src/store/modules/users/state");
 	  let firstNames = [];
 	  state.users.forEach((user) => {
 		firstNames.push(user.firstName);

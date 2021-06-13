@@ -17,6 +17,7 @@ export type MutationsType<S = StateType> = {
   [MutationNames.SET_EMAIL](state: S, email: string): void;
   [MutationNames.SET_USERNAME](state: S, username: string): void;
   [MutationNames.SET_AGE](state: S, age: number): void;
+  [MutationNames.SET_ERROR](state: S, error: string): void;
   [MutationNames.BUBBLE_SORT](
     state: S,
     payload: { field: string; language: string }
@@ -38,7 +39,7 @@ export interface ActionsType {
   [ActionNames.USER_REQUEST](
     { commit }: AugmentedActionContext,
     countOfUsers: number
-  ): Promise<IUser[]>;
+  ): Promise<IUser[]> | string;
 }
 
 // Getters types and interfaces

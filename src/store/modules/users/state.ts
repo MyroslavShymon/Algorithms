@@ -19,4 +19,5 @@ export const state = {
     Default: number[][];
   },
   JSON_str: "",
+  error: "",
 };

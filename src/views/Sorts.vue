@@ -14,7 +14,10 @@
     </div>
     <Buttons />
   </div>
-  <ResultTable :users="this.$store.state.users.users" />
+  <div v-if="this.$store.state.users.error" class="p-mt-3">
+    {{ this.$store.state.users.error }}
+  </div>
+  <ResultTable v-else :users="this.$store.state.users.users" />
 </template>
 
 <script lang="ts">

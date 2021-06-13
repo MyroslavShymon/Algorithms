@@ -12,6 +12,7 @@ export enum MutationNames {
   SET_AGE = "SET_AGE",
   // SORTS
   BUBBLE_SORT = "BUBBLE_SORT",
+  SET_ERROR = "SET_ERROR",
 }
 
 // Actions list
