@@ -11,6 +11,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import ColumnGroup from "primevue/columngroup";
 import Dropdown from "primevue/dropdown";
+import VueApexCharts from "vue3-apexcharts";
 
 import "primeflex/primeflex.css";
 import "primevue/resources/themes/mdc-light-indigo/theme.css"; //theme
@@ -21,6 +22,7 @@ const app = createApp(App);
 app
   .use(store)
   .use(router)
+  .use(VueApexCharts)
   .use(PrimeVue, { ripple: true });
 
 app.component("DataTable", DataTable);

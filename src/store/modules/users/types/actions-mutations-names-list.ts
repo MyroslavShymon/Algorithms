@@ -13,6 +13,7 @@ export enum MutationNames {
   // SORTS
   BUBBLE_SORT = "BUBBLE_SORT",
   SET_ERROR = "SET_ERROR",
+  QUICK_SORT = "QUICK_SORT",
 }
 
 // Actions list

@@ -1,7 +1,7 @@
 <template>
   <div class="p-d-flex p-mt-2" v-if="JSON.stringify(users) !== '[]'">
     <div v-show="this.$store.state.users.showGraphicLeft" style="flex-grow:1">
-      Graphic
+      <BarChart />
     </div>
     <div
       class="p-jc-end"
@@ -41,17 +41,38 @@
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import Loader from "@/components/Loader.vue";
+
 import { IUser } from "@/store/modules/users/types/interfaces";
+import Loader from "@/components/Loader.vue";
+import BarChart from "@/components/Sort/BarChart.vue";
+
 @Options({
   name: "ResultTable",
   components: {
     Loader,
+    BarChart,
+  },
+  data() {
+    return {};
   },
 })
 export default class ResultTable extends Vue {
   @Prop() users!: IUser[];
-
+  // basicData = {
+  //   labels: ["January", "February", "March", "April", "May", "June", "July"],
+  //   datasets: [
+  //     {
+  //       label: "My First dataset",
+  //       backgroundColor: "#42A5F5",
+  //       data: [65, 59, 80, 81, 56, 55, 40],
+  //     },
+  //     {
+  //       label: "My Second dataset",
+  //       backgroundColor: "#FFA726",
+  //       data: [28, 48, 40, 19, 86, 27, 90],
+  //     },
+  //   ],
+  // };
   private get usersToShow(): number[] {
     if (this.users.length <= 10) {
       return [this.users.length];

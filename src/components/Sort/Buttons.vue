@@ -155,7 +155,10 @@ export default class Buttons extends Vue {
         });
         break;
       case "quickSort":
-        console.log("quickSort");
+        this.$store.commit(MutationNames.QUICK_SORT, {
+          field: this.selectedField.code,
+          language: this.selectedLang.code,
+        });
         break;
       default:
         break;
