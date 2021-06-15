@@ -15,21 +15,18 @@ import { Vue, Options } from "vue-class-component";
   name: "BarChart",
   data() {
     return {
-      averageSortingSpeedCPP: [] as number[],
-      averageSortingSpeedWASM: [] as number[],
-      averageSortingSpeedTS: [] as number[],
       series: [
         {
           name: "CPP",
-          data: this.averageSortingSpeedCPP,
+          data: this.$store.state.users.cppSpeads,
         },
         {
           name: "WASM",
-          data: this.averageSortingSpeedWASM,
+          data: this.$store.state.users.wasmSpeads,
         },
         {
           name: "TypeScript/JavaScript",
-          data: this.averageSortingSpeedTS,
+          data: this.$store.state.users.tsSpeads,
         },
       ],
       chartOptions: {
@@ -40,7 +37,7 @@ import { Vue, Options } from "vue-class-component";
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: "55%",
+            columnWidth: "20%",
             endingShape: "rounded",
           },
         },
@@ -57,7 +54,7 @@ import { Vue, Options } from "vue-class-component";
         },
         yaxis: {
           title: {
-            text: "$ (thousands)",
+            text: "Sorting schedule",
           },
         },
         fill: {
@@ -66,20 +63,12 @@ import { Vue, Options } from "vue-class-component";
         tooltip: {
           y: {
             formatter: function(val) {
-              return "$ " + val + " thousands";
+              return val + " ms";
             },
           },
         },
       },
     };
-  },
-  mounted() {
-    //   this.$store.state.users.sortsTime.forEach(element => {
-    //   });
-    // this.$store.state.users.sortsTime[0].reduce((accumulator, currentValue) => {
-    //   return accumulator + currentValue;
-    // }) / this.$store.state.users.sortsTime[0].length;
-    // this.averageSortingSpeedCPP.push()
   },
 })
 export default class BarChart extends Vue {}

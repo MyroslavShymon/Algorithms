@@ -129,6 +129,9 @@ export default class Buttons extends Vue {
       MutationNames.SHOW_GRAPHIC,
       !this.$store.state.users.showGraphicLeft
     );
+    console.log("changeShowGraphicLeft");
+
+    this.$store.commit(MutationNames.SET_SPEADS);
   }
   private saveUsers() {
     localStorage.users = JSON.stringify(this.$store.state.users.users);
@@ -163,6 +166,8 @@ export default class Buttons extends Vue {
       default:
         break;
     }
+    //! Пофіксити реактивність
+    this.$store.commit(MutationNames.SET_SPEADS);
   }
   private async setUsers() {
     this.$store.state.users.users = await this.$store.dispatch(

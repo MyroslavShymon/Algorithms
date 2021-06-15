@@ -13,8 +13,8 @@ export const state = {
   users: [] as IUser[],
   sortsTime: {
     Bubble: [[], [], []],
-    Quick: [[], [], []],
-    Default: [[], [], []],
+    Quick: [[3, 5, 7], [3, 6], [1]],
+    Default: [[4], [7], [9, 10]],
   } as {
     Bubble: number[][];
     Quick: number[][];
@@ -23,4 +23,7 @@ export const state = {
   JSON_str: "",
   error: "",
   sortType: "",
+  cppSpeads: [] as number[],
+  wasmSpeads: [] as number[],
+  tsSpeads: [] as number[],
 };

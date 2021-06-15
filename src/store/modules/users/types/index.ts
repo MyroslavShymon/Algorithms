@@ -17,6 +17,7 @@ export type MutationsType<S = StateType> = {
   [MutationNames.SET_USERNAME](state: S, username: string): void;
   [MutationNames.SET_AGE](state: S, age: number): void;
   [MutationNames.SET_ERROR](state: S, error: string): void;
+  [MutationNames.SET_SPEADS](state: S): void;
   [MutationNames.BUBBLE_SORT](
     state: S,
     payload: { field: string; language: string }
@@ -43,5 +44,7 @@ export interface ActionsType {
 
 // Getters types and interfaces
 export type GettersType = {
-  // doubledCounter(state: StateType): number;
+  getCppSpeads(state: StateType): number[];
+  getWasmSpeads(state: StateType): number[];
+  getTSSpeads(state: StateType): number[];
 };

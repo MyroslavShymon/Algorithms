@@ -37,6 +37,80 @@ export const mutations: MutationTree<StateType> & MutationsType = {
   [MutationNames.SET_USERNAME](state, username: string) {
     state.username = username;
   },
+  [MutationNames.SET_SPEADS](state) {
+    //! Говнокод
+    for (const sortType in state.sortsTime) {
+      switch (sortType) {
+        case "Bubble":
+          state.cppSpeads[0] =
+            state.sortsTime[sortType][0].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][0].length;
+
+          break;
+        case "Quick":
+          state.cppSpeads[1] =
+            state.sortsTime[sortType][0].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][0].length;
+
+          break;
+        case "Default":
+          state.cppSpeads[2] =
+            state.sortsTime[sortType][0].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][0].length;
+
+          break;
+      }
+      switch (sortType) {
+        case "Bubble":
+          state.wasmSpeads[0] =
+            state.sortsTime[sortType][1].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][1].length;
+
+          break;
+        case "Quick":
+          state.wasmSpeads[1] =
+            state.sortsTime[sortType][1].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][1].length;
+
+          break;
+        case "Default":
+          state.wasmSpeads[2] =
+            state.sortsTime[sortType][1].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][1].length;
+
+          break;
+      }
+      switch (sortType) {
+        case "Bubble":
+          state.tsSpeads[0] =
+            state.sortsTime[sortType][2].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][2].length;
+
+          break;
+        case "Quick":
+          state.tsSpeads[1] =
+            state.sortsTime[sortType][2].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][2].length;
+
+          break;
+        case "Default":
+          state.tsSpeads[2] =
+            state.sortsTime[sortType][2].reduce((accumulator, currentValue) => {
+              return accumulator + currentValue;
+            }) / state.sortsTime[sortType][2].length;
+
+          break;
+      }
+    }
+  },
   [MutationNames.SET_AGE](state, age: number) {
     state.age = age;
   },
